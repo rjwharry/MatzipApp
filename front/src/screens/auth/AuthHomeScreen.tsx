@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 import { StackScreenProps } from '@react-navigation/stack';
 import React from 'react';
 import { View, StyleSheet, Image, Dimensions } from 'react-native';
@@ -14,7 +15,7 @@ const AuthHomeScreen = ({ navigation } : AuthHomeScreenProps) => {
             <View style={styles.imageContainer}>
                 <Image 
                     style={styles.image} 
-                    source={require("../../assets/MATZIP.png")}
+                    source={require('../../assets/matzip.png')}
                 />
             </View>
             <View style={styles.buttonContainer}>
