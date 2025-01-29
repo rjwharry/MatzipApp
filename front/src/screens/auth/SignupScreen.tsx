@@ -1,5 +1,5 @@
-import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import React, { useRef } from 'react';
+import { StyleSheet, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import CustomButton from '../../components/CustomButton';
 import InputField from '../../components/InputField';
@@ -7,6 +7,8 @@ import useForm from '../../hooks/useForm';
 import { validateSignup } from '../../utils';
 
 const SignupScreen: React.FC = () => {
+    const passwordRef = useRef<TextInput | null>(null);
+    const passwordConfirmRef = useRef<TextInput | null>(null);
     const signup = useForm({
         initialValues: {
             email: '',
@@ -15,6 +17,9 @@ const SignupScreen: React.FC = () => {
         },
         validate: validateSignup
     })
+    const handleSubmit = () => {
+        console.log('values', signup.values);
+    }
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.inputContainer}>
@@ -23,24 +28,41 @@ const SignupScreen: React.FC = () => {
                     error={signup.errors.email}
                     inputMode='email'
                     touched={signup.touched.email} 
+                    autoFocus={true}
+                    returnKeyType='next'
+                    // submitBehavior='newline'
+                    onSubmitEditing={() => {
+                        passwordRef.current?.focus();
+                    }}
                     {...signup.getTextInputProps('email')}
                 />
                 <InputField 
+                    ref={passwordRef}
                     placeholder='비밀번호' 
+                    textContentType='oneTimeCode'
                     error={signup.errors.password}
                     secureTextEntry
                     touched={signup.touched.password}
+                    returnKeyType='next'
+                    // submitBehavior='newline'
+                    onSubmitEditing={() => {
+                        passwordConfirmRef.current?.focus();
+                    }}
                     {...signup.getTextInputProps('password')}
                 />
                 <InputField 
+                    ref={passwordConfirmRef}
                     placeholder='비밀번호 확인' 
+                    textContentType='oneTimeCode'
                     error={signup.errors.passwordConfirm}
                     secureTextEntry
                     touched={signup.touched.passwordConfirm}
+                    returnKeyType='join'
+                    onSubmitEditing={handleSubmit}
                     {...signup.getTextInputProps('passwordConfirm')}
                 />
             </View>
-            <CustomButton label='회원가입'/>
+            <CustomButton label='회원가입' onPress={handleSubmit}/>
         </SafeAreaView>
     );
 };

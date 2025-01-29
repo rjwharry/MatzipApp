@@ -1,17 +1,20 @@
-import React, { useRef } from 'react';
+/* eslint-disable react/display-name */
+import React, { ForwardedRef, forwardRef, useRef } from 'react';
 import { Dimensions, Pressable, StyleSheet, TextInput, TextInputProps, View } from 'react-native';
-import { colors } from '../constants';
 import { Text } from 'react-native-gesture-handler';
+import { colors } from '../constants';
+import { mergeRefs } from '../utils';
 
 interface InputFieldProps extends TextInputProps {
     disabled?: boolean; 
     error?: string;
     touched?: boolean
+
 }
 
 const deviceHeight = Dimensions.get('screen').height
 
-const InputField = ({disabled = false, error, touched, ...props }: InputFieldProps) => {
+const InputField = forwardRef(({disabled = false, error, touched, ...props }: InputFieldProps, ref: ForwardedRef<TextInput>) => {
     const innerRef = useRef<TextInput | null>(null);
 
     const handlePressInput = () => {
@@ -25,7 +28,7 @@ const InputField = ({disabled = false, error, touched, ...props }: InputFieldPro
                 touched && Boolean(error) && styles.inputError
             ]}>
                 <TextInput
-                    ref={innerRef}
+                    ref={ref ? mergeRefs(innerRef, ref) : innerRef}
                     editable={!disabled}
                     style={[styles.input]} 
                     placeholderTextColor={colors.GRAY_500}
@@ -38,7 +41,7 @@ const InputField = ({disabled = false, error, touched, ...props }: InputFieldPro
             </View>
         </Pressable>
     );
-};
+});
 
 const styles = StyleSheet.create({
     container: {
