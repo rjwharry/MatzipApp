@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 
 interface UseFormProps<T> {
     initialValues: T;
-    validateLogin: (values: T) => Record<keyof T, string>;
+    validate: (values: T) => Record<keyof T, string>;
 }
 
-const useForm = <T>({initialValues, validateLogin}: UseFormProps<T>) => {
+const useForm = <T>({initialValues, validate}: UseFormProps<T>) => {
     const [values, setValues] = useState(initialValues);
     const [touched, setTouched] = useState<Record<string, boolean>>({});
     const [errors, setErrors] = useState<Record<string, string>>({});
@@ -33,9 +33,9 @@ const useForm = <T>({initialValues, validateLogin}: UseFormProps<T>) => {
     }
 
     useEffect(() => {
-        const newErrors = validateLogin(values);
+        const newErrors = validate(values);
         setErrors(newErrors);
-    }, [validateLogin, values])
+    }, [validate, values])
 
     return {
         values,

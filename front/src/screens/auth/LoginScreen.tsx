@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import InputField from '../../components/InputField';
 import CustomButton from '../../components/CustomButton';
+import InputField from '../../components/InputField';
 import useForm from '../../hooks/useForm';
 import { validateLogin } from '../../utils';
 
@@ -14,7 +14,7 @@ const LoginScreen = () => {
             email: '',
             password: ''
         },
-        validateLogin: validateLogin,
+        validate: validateLogin,
     });
 
     const handleSubmit = () => {

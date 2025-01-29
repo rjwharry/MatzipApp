@@ -3,7 +3,7 @@ interface UserInformation {
     password: string;
 }
 
-const validateLogin = (values: UserInformation) => {
+const validateUser = (values: UserInformation) => {
     const errors: Record<string, string> = { email: '', password: '' };
     if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)) {
         errors.email = '유효한 이메일을 입력해주세요';
@@ -14,4 +14,17 @@ const validateLogin = (values: UserInformation) => {
     return errors;
 }
 
-export {validateLogin}
+const validateLogin = (values: UserInformation) => {
+    return validateUser(values);
+}
+
+const validateSignup = (values: UserInformation & {passwordConfirm: string}) => {
+    const errors = validateUser(values);
+    const signupErrors: Record<string, string> = { ...errors, passwordConfirm: '' };
+    if (values.password !== values.passwordConfirm) {
+        signupErrors.passwordConfirm = '비밀번호가 일치하지 않습니다';
+    }
+    return signupErrors;
+}
+
+export { validateLogin, validateSignup };
