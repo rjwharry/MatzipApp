@@ -3,10 +3,12 @@ import { StyleSheet, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import CustomButton from '../../components/CustomButton';
 import InputField from '../../components/InputField';
+import useAuth from '../../hooks/queries/useAuth';
 import useForm from '../../hooks/useForm';
 import { validateSignup } from '../../utils';
 
 const SignupScreen: React.FC = () => {
+    const {loginMutation, signupMutation} = useAuth();
     const passwordRef = useRef<TextInput | null>(null);
     const passwordConfirmRef = useRef<TextInput | null>(null);
     const signup = useForm({
@@ -18,7 +20,12 @@ const SignupScreen: React.FC = () => {
         validate: validateSignup
     })
     const handleSubmit = () => {
-        console.log('values', signup.values);
+        const {email, password} = signup.values
+        signupMutation.mutate({email, password}, {
+            onSuccess: () => {
+                loginMutation.mutate({email, password});   
+            }
+        });
     }
     return (
         <SafeAreaView style={styles.container}>

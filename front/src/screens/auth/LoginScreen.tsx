@@ -3,6 +3,7 @@ import { StyleSheet, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import CustomButton from '../../components/CustomButton';
 import InputField from '../../components/InputField';
+import useAuth from '../../hooks/queries/useAuth';
 import useForm from '../../hooks/useForm';
 import { validateLogin } from '../../utils';
 
@@ -10,6 +11,7 @@ import { validateLogin } from '../../utils';
 
 const LoginScreen = () => {
     const passwordRef = useRef<TextInput | null>(null);
+    const {loginMutation} = useAuth(); 
     const login = useForm({
         initialValues: {
             email: '',
@@ -19,7 +21,7 @@ const LoginScreen = () => {
     });
 
     const handleSubmit = () => {
-        console.log('values', login.values);
+        loginMutation.mutate(login.values);
     }
 
     return (
