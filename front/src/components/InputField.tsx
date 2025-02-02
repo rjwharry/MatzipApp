@@ -1,9 +1,9 @@
 /* eslint-disable react/display-name */
+import { colors } from '@/constants';
+import { mergeRefs } from '@/utils';
 import React, { ForwardedRef, forwardRef, useRef } from 'react';
 import { Dimensions, Pressable, StyleSheet, TextInput, TextInputProps, View } from 'react-native';
 import { Text } from 'react-native-gesture-handler';
-import { colors } from '../constants';
-import { mergeRefs } from '../utils';
 
 interface InputFieldProps extends TextInputProps {
     disabled?: boolean; 

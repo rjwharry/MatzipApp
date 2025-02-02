@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
+import CustomButton from '@/components/CustomButton';
+import { authNavigations } from '@/constants';
+import { AuthStackParamList } from '@/navigations/stack/AuthStackNavigator';
 import { StackScreenProps } from '@react-navigation/stack';
 import React from 'react';
 import { Dimensions, Image, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import CustomButton from '../../components/CustomButton';
-import { authNavigations } from '../../constants';
-import { AuthStackParamList } from '../../navigations/stack/AuthStackNavigator';
 
 type AuthHomeScreenProps = StackScreenProps<AuthStackParamList, typeof authNavigations.AUTH_HOME>;
 

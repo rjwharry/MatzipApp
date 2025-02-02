@@ -1,4 +1,4 @@
-import { axiosInstance } from "../api";
+import { axiosInstance } from "@/api";
 
 const setHeader = (key: string, value: string) => {
     axiosInstance.defaults.headers.common[key] = value;

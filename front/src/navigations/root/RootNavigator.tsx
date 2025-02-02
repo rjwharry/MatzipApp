@@ -1,7 +1,7 @@
+import useAuth from '@/hooks/queries/useAuth';
+import MainDrawerNavigator from '@/navigations/drawer/MainDrawerNavigator';
+import AuthStackNavigator from '@/navigations/stack/AuthStackNavigator';
 import React from 'react';
-import useAuth from '../../hooks/queries/useAuth';
-import MainDrawerNavigator from '../drawer/MainDrawerNavigator';
-import AuthStackNavigator from '../stack/AuthStackNavigator';
 
 const RootNavigator = () => {
     const {isLogin} = useAuth();

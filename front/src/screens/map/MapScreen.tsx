@@ -1,7 +1,7 @@
+import useAuth from '@/hooks/queries/useAuth';
 import React from 'react';
 import { Button, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import useAuth from '../../hooks/queries/useAuth';
 
 const MapHomeScreen: React.FC = () => {
     const { logoutMutation } = useAuth();

@@ -1,8 +1,8 @@
+import { getAccessToken, getProfile, login, logout, queryClient, signup } from "@/api";
+import { headerKeys, queryKeys, storageKeys, UseMutationCustomOptions, UseQueryCustomOptions } from "@/types";
+import { numbers, removeEncryptStorage, removeHeader, setEncryptStorage, setHeader } from "@/utils";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
-import { getAccessToken, getProfile, login, logout, queryClient, signup } from "../../api";
-import { headerKeys, queryKeys, storageKeys, UseMutationCustomOptions, UseQueryCustomOptions } from "../../types";
-import { numbers, removeEncryptStorage, removeHeader, setEncryptStorage, setHeader } from "../../utils";
 
 
 
