@@ -1,4 +1,5 @@
 import { colors, mapNavigations } from '@/constants';
+import usePermission from '@/hooks/usePermission';
 import useUserLocation from '@/hooks/useUserLocation';
 import { MainDrawerParamList } from '@/navigations/drawer/MainDrawerNavigator';
 import { MapStackParamList } from '@/navigations/stack/MapStackNavigator';
@@ -20,6 +21,7 @@ const MapHomeScreen = () => {
   const inset = useSafeAreaInsets();
   const navigation = useNavigation<MapHomeScreenNavigationProps>();
   const { userLocation, isUserLocationError } = useUserLocation();
+  usePermission('LOCATION');
 
   const handleOnPressUserLocation = () => {
     if (isUserLocationError) {

@@ -1,15 +1,18 @@
-import { ForwardedRef } from "react";
+import { ForwardedRef } from 'react';
+import { Platform } from 'react-native';
 
 const mergeRefs = <T>(...refs: ForwardedRef<T>[]) => {
-    return (node: T) => {
-        refs.forEach(ref => {
-            if (typeof ref === 'function') {
-                ref(node);
-            } else if (ref != null) {
-                ref.current = node;
-            }
-        });
-    }
-}
+  return (node: T) => {
+    refs.forEach((ref) => {
+      if (typeof ref === 'function') {
+        ref(node);
+      } else if (ref != null) {
+        ref.current = node;
+      }
+    });
+  };
+};
 
-export { mergeRefs };
+const isAndroid = Platform.OS === 'android';
+
+export { isAndroid, mergeRefs };

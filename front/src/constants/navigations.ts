@@ -1,5 +1,5 @@
 const mainNavigations = {
-  MAP_HOME: 'MapHome',
+  MAP_HOME: 'MapStackNavigation',
   FEED_HOME: 'FeedHome',
   CALENDAR_HOME: 'CalendarHome',
 } as const;
