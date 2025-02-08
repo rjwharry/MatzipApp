@@ -1,5 +1,5 @@
 import CustomMarker from '@/components/CustomMarker';
-import { colors, mapNavigations } from '@/constants';
+import { alerts, colors, mapNavigations } from '@/constants';
 import usePermission from '@/hooks/usePermission';
 import useUserLocation from '@/hooks/useUserLocation';
 import { MainDrawerParamList } from '@/navigations/drawer/MainDrawerNavigator';
@@ -11,7 +11,7 @@ import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { CompositeNavigationProp, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { useRef, useState } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Alert, Pressable, StyleSheet, View } from 'react-native';
 import MapView, { LatLng, LongPressEvent, PROVIDER_GOOGLE } from 'react-native-maps';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -25,11 +25,19 @@ const MapHomeScreen = () => {
   const inset = useSafeAreaInsets();
   const navigation = useNavigation<MapHomeScreenNavigationProps>();
   const { userLocation, isUserLocationError } = useUserLocation();
-  const [selectLocation, setSelectLocation] = useState<LatLng>();
+  const [selectLocation, setSelectLocation] = useState<LatLng | null>();
   usePermission('LOCATION');
 
   const handleLongPressMapView = ({ nativeEvent }: LongPressEvent) => {
     setSelectLocation(nativeEvent.coordinate);
+  };
+
+  const handleOnPressAddPost = () => {
+    if (!selectLocation) {
+      return Alert.alert(alerts.NOT_SELECTED.TITLE, alerts.NOT_SELECTED.DESCRIPTION);
+    }
+    navigation.navigate(mapNavigations.ADD_POST, { location: selectLocation });
+    setSelectLocation(null);
   };
 
   const handleOnPressUserLocation = () => {
@@ -70,7 +78,10 @@ const MapHomeScreen = () => {
         <Ionicons name="menu" color={colors.WHITE} size={25} />
       </Pressable>
       <View style={styles.buttonList}>
-        <Pressable style={styles.locationButton} onPress={handleOnPressUserLocation}>
+        <Pressable style={styles.mapButton} onPress={handleOnPressAddPost}>
+          <MaterialIcons name="add" color={colors.WHITE} size={25} />
+        </Pressable>
+        <Pressable style={styles.mapButton} onPress={handleOnPressUserLocation}>
           <MaterialIcons name="my-location" color={colors.WHITE} size={25} />
         </Pressable>
       </View>
@@ -103,7 +114,7 @@ const styles = StyleSheet.create({
     bottom: 30,
     right: 15,
   },
-  locationButton: {
+  mapButton: {
     backgroundColor: colors.PINK_700,
     marginVertical: 5,
     height: 48,
