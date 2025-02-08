@@ -1,14 +1,18 @@
-import { axiosInstance } from "@/api";
+import { axiosInstance } from '@/api';
 
 const setHeader = (key: string, value: string) => {
-    axiosInstance.defaults.headers.common[key] = value;
-}
+  axiosInstance.defaults.headers.common[key] = value;
+};
+
+const getHeader = (key: string) => {
+  return axiosInstance.defaults.headers.common[key];
+};
 
 const removeHeader = (key: string) => {
-    if (!axiosInstance.defaults.headers.common[key]) {
-        return;
-    } 
-    delete axiosInstance.defaults.headers.common[key];
-}
+  if (!axiosInstance.defaults.headers.common[key]) {
+    return;
+  }
+  delete axiosInstance.defaults.headers.common[key];
+};
 
-export { removeHeader, setHeader };
+export { getHeader, removeHeader, setHeader };

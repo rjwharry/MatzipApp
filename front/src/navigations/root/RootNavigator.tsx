@@ -4,9 +4,9 @@ import AuthStackNavigator from '@/navigations/stack/AuthStackNavigator';
 import React from 'react';
 
 const RootNavigator = () => {
-    const {isLogin} = useAuth();
+  const { isLogin } = useAuth();
 
-    return <>{isLogin ? <MainDrawerNavigator /> : <AuthStackNavigator />}</>
+  return <>{isLogin ? <MainDrawerNavigator /> : <AuthStackNavigator />}</>;
 };
 
 export default RootNavigator;

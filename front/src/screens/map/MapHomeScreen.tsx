@@ -1,10 +1,13 @@
 import CustomMarker from '@/components/CustomMarker';
 import { alerts, colors, mapNavigations } from '@/constants';
+import useGetMarkers from '@/hooks/queries/useGetMarkers';
 import usePermission from '@/hooks/usePermission';
 import useUserLocation from '@/hooks/useUserLocation';
 import { MainDrawerParamList } from '@/navigations/drawer/MainDrawerNavigator';
 import { MapStackParamList } from '@/navigations/stack/MapStackNavigator';
 import mapStyle from '@/style/mapStyle';
+import { headerKeys } from '@/types';
+import { getHeader } from '@/utils';
 import Ionicons from '@react-native-vector-icons/ionicons';
 import MaterialIcons from '@react-native-vector-icons/material-icons';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
@@ -12,7 +15,13 @@ import { CompositeNavigationProp, useNavigation } from '@react-navigation/native
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { useRef, useState } from 'react';
 import { Alert, Pressable, StyleSheet, View } from 'react-native';
-import MapView, { LatLng, LongPressEvent, PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, {
+  Callout,
+  LatLng,
+  LongPressEvent,
+  Marker,
+  PROVIDER_GOOGLE,
+} from 'react-native-maps';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type MapHomeScreenNavigationProps = CompositeNavigationProp<
@@ -27,7 +36,10 @@ const MapHomeScreen = () => {
   const { userLocation, isUserLocationError } = useUserLocation();
   const [selectLocation, setSelectLocation] = useState<LatLng | null>();
   usePermission('LOCATION');
-
+  //TODO: AccessToken이 있으면 알아서 refetch 되도록 변경해야 함.
+  const { data: markers = [] } = useGetMarkers({
+    enabled: !!getHeader(headerKeys.AUTHORIZATION),
+  });
   const handleLongPressMapView = ({ nativeEvent }: LongPressEvent) => {
     setSelectLocation(nativeEvent.coordinate);
   };
@@ -64,12 +76,14 @@ const MapHomeScreen = () => {
         customMapStyle={mapStyle}
         onLongPress={handleLongPressMapView}
       >
-        <CustomMarker
-          coordinate={{ latitude: 37.403859, longitude: 127.121451 }}
-          color="RED"
-          score={1}
-        />
-        {selectLocation && <CustomMarker coordinate={selectLocation} color="BLUE" />}
+        {markers.map(({ id, score, color, ...coordinate }) => (
+          <CustomMarker key={id} score={score} color={color} coordinate={coordinate} />
+        ))}
+        {selectLocation && (
+          <Callout>
+            <Marker coordinate={selectLocation} />
+          </Callout>
+        )}
       </MapView>
       <Pressable
         style={[styles.drawerButton, { top: inset.top || 20 }]}
