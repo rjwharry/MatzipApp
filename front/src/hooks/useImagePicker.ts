@@ -19,6 +19,18 @@ const UseImagePicker = ({ initialImages }: UseImagePickerProps) => {
     }
     setImageUris((prev) => [...prev, ...uris.map((uri) => ({ uri }))]);
   };
+
+  const changeOrderImageUris = (from: number, to: number) => {
+    const newImageUris = [...imageUris];
+    const [target] = newImageUris.splice(from, 1);
+    newImageUris.splice(to, 0, target);
+    setImageUris(newImageUris);
+  };
+
+  const deleteImageUri = (uri: string) => {
+    const newImageUris = imageUris.filter((imageUri) => imageUri.uri !== uri);
+    setImageUris(newImageUris);
+  };
   const handleAddImage = () => {
     ImagePicker.openPicker({
       mediaType: 'photo',
@@ -44,7 +56,7 @@ const UseImagePicker = ({ initialImages }: UseImagePickerProps) => {
       });
   };
 
-  return { imageUris, handleAddImage };
+  return { imageUris, handleAddImage, delete: deleteImageUri, changeOrder: changeOrderImageUris };
 };
 
 export default UseImagePicker;
