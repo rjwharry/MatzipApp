@@ -1,14 +1,18 @@
 import AddPostHeaderRight from '@/components/AddPostHeaderRight';
 import CustomButton from '@/components/CustomButton';
 import DatePickerOption from '@/components/DatePickerOption';
+import ImageInput from '@/components/ImageInput';
 import InputField from '@/components/InputField';
 import MarkerSelector from '@/components/MarkerSelector';
+import PreviewImageList from '@/components/PreviewImageList';
 import ScoreInput from '@/components/ScoreInput';
 import { colors, mapNavigations } from '@/constants';
 import useMutateCreatePost from '@/hooks/queries/useMutateCreatePost';
 import useForm from '@/hooks/useForm';
 import useGetAddress from '@/hooks/useGetAddress';
+import UseImagePicker from '@/hooks/useImagePicker';
 import useModal from '@/hooks/useModal';
+import usePermission from '@/hooks/usePermission';
 import { MapStackParamList } from '@/navigations/stack/MapStackNavigator';
 import { MarkerColor } from '@/types';
 import { getDateWithSeparator, validatePost } from '@/utils';
@@ -28,6 +32,8 @@ const AddPostScreen = ({ route, navigation }: AddPostScreenProps) => {
   const [isPicked, setIsPicked] = useState(false);
   const address = useGetAddress(location);
   const createPost = useMutateCreatePost();
+  const imagePicker = UseImagePicker({ initialImages: [] });
+  usePermission('PHOTO');
 
   const dateOption = useModal();
 
@@ -126,6 +132,10 @@ const AddPostScreen = ({ route, navigation }: AddPostScreenProps) => {
             score={score}
           />
           <ScoreInput score={score} onChangeScore={handleChangeScore} />
+          <View style={styles.imageViewer}>
+            <ImageInput onPressAddImage={imagePicker.handleAddImage} />
+            <PreviewImageList imageUris={imagePicker.imageUris} />
+          </View>
           <DatePickerOption
             isVisible={dateOption.isVisible}
             date={date}
@@ -151,6 +161,9 @@ const styles = StyleSheet.create({
   inputContainer: {
     gap: 20,
     marginBottom: 20,
+  },
+  imageViewer: {
+    flexDirection: 'row',
   },
 });
 

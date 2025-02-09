@@ -59,8 +59,8 @@ const MapHomeScreen = () => {
     mapRef.current?.animateToRegion({
       latitude: userLocation.latitude,
       longitude: userLocation.longitude,
-      latitudeDelta: 0.0473,
-      longitudeDelta: 0.092,
+      latitudeDelta: 0.0173,
+      longitudeDelta: 0.0022,
     });
   };
 
@@ -75,6 +75,7 @@ const MapHomeScreen = () => {
         showsMyLocationButton={false}
         customMapStyle={mapStyle}
         onLongPress={handleLongPressMapView}
+        region={{ ...userLocation, latitudeDelta: 0.0173, longitudeDelta: 0.0022 }}
       >
         {markers.map(({ id, score, color, ...coordinate }) => (
           <CustomMarker key={id} score={score} color={color} coordinate={coordinate} />
