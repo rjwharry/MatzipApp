@@ -1,6 +1,8 @@
 import CustomMarker from '@/components/CustomMarker';
+import MarkerModal from '@/components/MarkerModal';
 import { alerts, colors, mapNavigations } from '@/constants';
 import useGetMarkers from '@/hooks/queries/useGetMarkers';
+import useModal from '@/hooks/useModal';
 import usePermission from '@/hooks/usePermission';
 import useUserLocation from '@/hooks/useUserLocation';
 import { MainDrawerParamList } from '@/navigations/drawer/MainDrawerNavigator';
@@ -35,13 +37,31 @@ const MapHomeScreen = () => {
   const navigation = useNavigation<MapHomeScreenNavigationProps>();
   const { userLocation, isUserLocationError } = useUserLocation();
   const [selectLocation, setSelectLocation] = useState<LatLng | null>();
+  const [markerId, setMarkerId] = useState<number | null>(null);
   usePermission('LOCATION');
   //TODO: AccessToken이 있으면 알아서 refetch 되도록 변경해야 함.
   const { data: markers = [] } = useGetMarkers({
     enabled: !!getHeader(headerKeys.AUTHORIZATION),
   });
+  const markderModal = useModal();
+
   const handleLongPressMapView = ({ nativeEvent }: LongPressEvent) => {
     setSelectLocation(nativeEvent.coordinate);
+  };
+
+  const moveMapView = (coordinate: LatLng) => {
+    mapRef.current?.animateToRegion({
+      latitude: coordinate.latitude,
+      longitude: coordinate.longitude,
+      latitudeDelta: 0.0173,
+      longitudeDelta: 0.0022,
+    });
+  };
+
+  const handleOnPressMarker = (id: number, coordinate: LatLng) => {
+    moveMapView(coordinate);
+    setMarkerId(id);
+    markderModal.show();
   };
 
   const handleOnPressAddPost = () => {
@@ -56,12 +76,7 @@ const MapHomeScreen = () => {
     if (isUserLocationError) {
       return;
     }
-    mapRef.current?.animateToRegion({
-      latitude: userLocation.latitude,
-      longitude: userLocation.longitude,
-      latitudeDelta: 0.0173,
-      longitudeDelta: 0.0022,
-    });
+    moveMapView(userLocation);
   };
 
   return (
@@ -78,7 +93,13 @@ const MapHomeScreen = () => {
         region={{ ...userLocation, latitudeDelta: 0.0173, longitudeDelta: 0.0022 }}
       >
         {markers.map(({ id, score, color, ...coordinate }) => (
-          <CustomMarker key={id} score={score} color={color} coordinate={coordinate} />
+          <CustomMarker
+            key={id}
+            score={score}
+            color={color}
+            coordinate={coordinate}
+            onPress={() => handleOnPressMarker(id, coordinate)}
+          />
         ))}
         {selectLocation && (
           <Callout>
@@ -100,6 +121,11 @@ const MapHomeScreen = () => {
           <MaterialIcons name="my-location" color={colors.WHITE} size={25} />
         </Pressable>
       </View>
+      <MarkerModal
+        isVisible={markderModal.isVisible}
+        markerId={markerId}
+        hide={markderModal.hide}
+      />
     </>
   );
 };

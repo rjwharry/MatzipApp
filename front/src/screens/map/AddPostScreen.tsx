@@ -72,7 +72,7 @@ const AddPostScreen = ({ route, navigation }: AddPostScreenProps) => {
       date,
       title: addPost.values.title,
       description: addPost.values.description,
-      imageUris: [],
+      imageUris: imagePicker.imageUris,
       color: markerColor,
       score: score,
     };
