@@ -1,8 +1,13 @@
 import HeaderButton from '@/components/HeaderButton';
 import React from 'react';
+import { View } from 'react-native';
 
 const AddPostHeaderRight = (onSubmit: () => void) => {
-  return <HeaderButton labelText="등록" onPress={onSubmit} />;
+  return (
+    <View>
+      <HeaderButton labelText="등록" onPress={onSubmit} />
+    </View>
+  );
 };
 
 export default AddPostHeaderRight;

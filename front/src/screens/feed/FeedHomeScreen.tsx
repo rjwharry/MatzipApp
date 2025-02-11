@@ -1,13 +1,19 @@
+import FeedList from '@/components/FeedList';
 import React from 'react';
-import { Text } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { StyleSheet, View } from 'react-native';
 
-const FeedHomeScreen: React.FC = () => {
-    return (
-        <SafeAreaView>
-            <Text>피드 스크린</Text>
-        </SafeAreaView>
-    );
+const FeedHomeScreen = () => {
+  return (
+    <View style={styles.container}>
+      <FeedList />
+    </View>
+  );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});
 
 export default FeedHomeScreen;
