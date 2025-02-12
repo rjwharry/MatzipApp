@@ -1,4 +1,4 @@
-import CustomMarker from '@/components/CustomMarker';
+import CustomMarker from '@/components/common/CustomMarker';
 import { colors } from '@/constants';
 import { MarkerColor } from '@/types';
 import React from 'react';
