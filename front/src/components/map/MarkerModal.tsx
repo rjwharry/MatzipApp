@@ -1,8 +1,11 @@
-import { colors } from '@/constants';
+import { colors, feedNavigations, mainNavigations } from '@/constants';
 import useGetPost from '@/hooks/queries/useGetPost';
+import { MainDrawerParamList } from '@/navigations/drawer/MainDrawerNavigator';
 import { getDateWithSeparator, isAndroid } from '@/utils';
 import MaterialIcons from '@react-native-vector-icons/material-icons';
 import Octicons from '@react-native-vector-icons/octicons';
+import { DrawerNavigationProp } from '@react-navigation/drawer';
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import {
   Dimensions,
@@ -21,17 +24,31 @@ interface MarkerModalProps {
   isVisible: boolean;
   hide: () => void;
 }
+
+type Navigation = DrawerNavigationProp<MainDrawerParamList>;
+
 const MarkerModal = ({ markerId, isVisible, hide }: MarkerModalProps) => {
   const { data: post, isPending, isError } = useGetPost(markerId);
+  const navigation = useNavigation<Navigation>();
 
   if (isPending || isError) {
     return <></>;
   }
 
+  const handlePressModal = () => {
+    navigation.navigate(mainNavigations.FEED_HOME, {
+      screen: feedNavigations.FEED_DETAIL,
+      params: {
+        id: post.id,
+      },
+      initial: false,
+    });
+  };
+
   return (
     <Modal visible={isVisible} transparent={true} animationType="slide">
       <SafeAreaView style={styles.optionBackground} onTouchEnd={hide}>
-        <Pressable style={styles.cardContainer} onPress={() => {}}>
+        <Pressable style={styles.cardContainer} onPress={handlePressModal}>
           <View style={styles.cardInner}>
             <View style={styles.cardAlign}>
               {post.images.length > 0 && (

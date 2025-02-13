@@ -9,6 +9,7 @@ const useMutateCreatePost = (options?: UseMutationCustomOptions) => {
     ...options,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [queryKeys.MARKER, queryKeys.GET_MARKERS] });
+      queryClient.invalidateQueries({ queryKey: [queryKeys.POST, queryKeys.GET_POSTS] });
     },
   });
 };
