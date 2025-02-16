@@ -1,11 +1,15 @@
 import CustomButton from '@/components/common/CustomButton';
 import PreviewImageList from '@/components/common/PreviewImageList';
-import { colorHex, colors, feedNavigations } from '@/constants';
+import { colorHex, colors, feedNavigations, mainNavigations, mapNavigations } from '@/constants';
 import useGetPost from '@/hooks/queries/useGetPost';
+import { MainDrawerParamList } from '@/navigations/drawer/MainDrawerNavigator';
 import { FeedStackParamList } from '@/navigations/stack/FeedStackNaviagtor';
+import useLocationStore from '@/store/useLocationStore';
 import { getDateLocaleFormat, isAndroid } from '@/utils';
 import Ionicons from '@react-native-vector-icons/ionicons';
 import Octicons from '@react-native-vector-icons/octicons';
+import { DrawerScreenProps } from '@react-navigation/drawer';
+import { CompositeScreenProps } from '@react-navigation/native';
 import { StackScreenProps } from '@react-navigation/stack';
 import React from 'react';
 import {
@@ -20,18 +24,30 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-type FeedDetailScreenProps = StackScreenProps<
-  FeedStackParamList,
-  typeof feedNavigations.FEED_DETAIL
+type FeedDetailScreenProps = CompositeScreenProps<
+  StackScreenProps<FeedStackParamList, typeof feedNavigations.FEED_DETAIL>,
+  DrawerScreenProps<MainDrawerParamList>
 >;
 
 const FeedDetailScreen = ({ route, navigation }: FeedDetailScreenProps) => {
   const { id } = route.params;
   const { data: post, isPending, isError } = useGetPost(id);
+  const { setMoveLocation } = useLocationStore();
   const insets = useSafeAreaInsets();
+
   if (isPending || isError) {
     return <></>;
   }
+
+  const handlePressMoveLocation = () => {
+    const { latitude, longitude } = post;
+    setMoveLocation({ latitude, longitude });
+    navigation.navigate(mainNavigations.MAP_HOME, {
+      screen: mapNavigations.MAP_HOME,
+      initial: false,
+    });
+  };
+
   return (
     <>
       <ScrollView
@@ -111,7 +127,12 @@ const FeedDetailScreen = ({ route, navigation }: FeedDetailScreenProps) => {
           >
             <Octicons name="star-fill" size={30} color={colors.WHITE} />
           </Pressable>
-          <CustomButton label="위치보기" size="medium" variant="filled" onPress={() => {}} />
+          <CustomButton
+            label="위치보기"
+            size="medium"
+            variant="filled"
+            onPress={handlePressMoveLocation}
+          />
         </View>
       </View>
     </>
