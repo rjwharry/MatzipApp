@@ -7,6 +7,7 @@ const queryKeys = {
   POST: 'post',
   GET_POST: 'getPost',
   GET_POSTS: 'getPosts',
+  DELETE_POST: 'deletePost',
 } as const;
 
 const storageKeys = {

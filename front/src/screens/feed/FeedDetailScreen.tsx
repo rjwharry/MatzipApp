@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 import CustomButton from '@/components/common/CustomButton';
 import PreviewImageList from '@/components/common/PreviewImageList';
 import FeedDetailOption from '@/components/feed/FeedDetailOption';
@@ -6,6 +7,7 @@ import useGetPost from '@/hooks/queries/useGetPost';
 import useModal from '@/hooks/useModal';
 import { MainDrawerParamList } from '@/navigations/drawer/MainDrawerNavigator';
 import { FeedStackParamList } from '@/navigations/stack/FeedStackNaviagtor';
+import useDetailPostStore from '@/store/useDetailPostStore';
 import useLocationStore from '@/store/useLocationStore';
 import { getDateLocaleFormat, isAndroid } from '@/utils';
 import Ionicons from '@react-native-vector-icons/ionicons';
@@ -13,7 +15,7 @@ import Octicons from '@react-native-vector-icons/octicons';
 import { DrawerScreenProps } from '@react-navigation/drawer';
 import { CompositeScreenProps } from '@react-navigation/native';
 import { StackScreenProps } from '@react-navigation/stack';
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Dimensions,
   Image,
@@ -37,6 +39,11 @@ const FeedDetailScreen = ({ route, navigation }: FeedDetailScreenProps) => {
   const { setMoveLocation } = useLocationStore();
   const insets = useSafeAreaInsets();
   const detailOption = useModal();
+  const { setDetailPost } = useDetailPostStore();
+
+  useEffect(() => {
+    post && setDetailPost(post);
+  }, [post]);
 
   if (isPending || isError) {
     return <></>;
