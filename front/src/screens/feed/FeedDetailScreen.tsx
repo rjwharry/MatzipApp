@@ -129,7 +129,7 @@ const FeedDetailScreen = ({ route, navigation }: FeedDetailScreenProps) => {
           <Text style={styles.descriptionText}>{post.description}</Text>
         </View>
         <View style={styles.imageContentContainer}>
-          {post.images.length > 0 && <PreviewImageList imageUris={post.images} />}
+          {post.images.length > 0 && <PreviewImageList imageUris={post.images} zoomEnabled />}
         </View>
       </ScrollView>
       <View style={[styles.bottomContainer, { paddingBottom: insets.bottom }]}>
