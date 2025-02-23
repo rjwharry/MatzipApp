@@ -27,5 +27,15 @@ const deletePost = async (id: number) => {
   return data;
 };
 
-export { createPost, deletePost, getPost, getPosts };
+type RequestUpdatePost = {
+  id: number;
+  body: Omit<Post, 'id' | 'latitude' | 'longitude' | 'address'> & { imageUris: ImageUri[] };
+};
+
+const updatePost = async ({ id, body }: RequestUpdatePost): Promise<ResopnseSinglePost> => {
+  const { data } = await axiosInstance.patch(`/posts/${id}`, body);
+  return data;
+};
+
+export { createPost, deletePost, getPost, getPosts, updatePost };
 export type { RequestPost, ResopnseSinglePost, ResponsePost };
