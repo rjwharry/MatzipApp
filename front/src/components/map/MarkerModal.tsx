@@ -1,11 +1,13 @@
-import { colors, feedNavigations, mainNavigations } from '@/constants';
+import { colors, feedNavigations, feedTabNavigations, mainNavigations } from '@/constants';
 import useGetPost from '@/hooks/queries/useGetPost';
 import { MainDrawerParamList } from '@/navigations/drawer/MainDrawerNavigator';
+import { FeedTabParamList } from '@/navigations/tab/FeedTabNavigator';
 import { getDateWithSeparator, isAndroid } from '@/utils';
 import MaterialIcons from '@react-native-vector-icons/material-icons';
 import Octicons from '@react-native-vector-icons/octicons';
+import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
-import { useNavigation } from '@react-navigation/native';
+import { CompositeNavigationProp, useNavigation } from '@react-navigation/native';
 import React from 'react';
 import {
   Dimensions,
@@ -25,7 +27,10 @@ interface MarkerModalProps {
   hide: () => void;
 }
 
-type Navigation = DrawerNavigationProp<MainDrawerParamList>;
+type Navigation = CompositeNavigationProp<
+  DrawerNavigationProp<MainDrawerParamList>,
+  BottomTabNavigationProp<FeedTabParamList>
+>;
 
 const MarkerModal = ({ markerId, isVisible, hide }: MarkerModalProps) => {
   const { data: post, isPending, isError } = useGetPost(markerId);
@@ -37,12 +42,17 @@ const MarkerModal = ({ markerId, isVisible, hide }: MarkerModalProps) => {
 
   const handlePressModal = () => {
     navigation.navigate(mainNavigations.FEED_HOME, {
-      screen: feedNavigations.FEED_DETAIL,
+      screen: feedTabNavigations.FEED_HOME,
       params: {
-        id: post.id,
+        screen: feedNavigations.FEED_DETAIL,
+        params: {
+          id: post.id,
+        },
+        initial: false,
       },
       initial: false,
     });
+    hide();
   };
 
   return (

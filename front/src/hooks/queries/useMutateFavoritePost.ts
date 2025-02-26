@@ -10,6 +10,9 @@ const useMutateFavoritePost = (options?: UseMutationCustomOptions) => {
       queryClient.invalidateQueries({
         queryKey: [queryKeys.POST, queryKeys.GET_POST, updatedId],
       });
+      queryClient.invalidateQueries({
+        queryKey: [queryKeys.POST, queryKeys.FAVORITE, queryKeys.GET_FAVORITES],
+      });
     },
     ...options,
   });
