@@ -1,21 +1,19 @@
 import FeedHomeHeaderLeft from '@/components/feed/FeedHomeHeaderLeft';
 import { colors, feedNavigations, feedTabNavigations } from '@/constants';
 import FeedFavoriteScreen from '@/screens/feed/FeedFavoriteScreen';
-import Iconicons from '@react-native-vector-icons/ionicons';
+import Ionicons from '@react-native-vector-icons/ionicons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { getFocusedRouteNameFromRoute, RouteProp } from '@react-navigation/native';
+import {
+  getFocusedRouteNameFromRoute,
+  NavigatorScreenParams,
+  RouteProp,
+} from '@react-navigation/native';
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import FeedStackNavigator from '../stack/FeedStackNaviagtor';
+import FeedStackNavigator, { FeedStackParamList } from '../stack/FeedStackNaviagtor';
 
 export type FeedTabParamList = {
-  [feedTabNavigations.FEED_HOME]: {
-    screen: typeof feedNavigations.FEED_DETAIL;
-    params: {
-      id: number;
-    };
-    initial: boolean;
-  };
+  [feedTabNavigations.FEED_HOME]: NavigatorScreenParams<FeedStackParamList>;
   [feedTabNavigations.FEED_FAVORITE]: undefined;
 };
 
@@ -33,9 +31,7 @@ const TabBarIcons = (route: RouteProp<FeedTabParamList>, focused: boolean) => {
       break;
   }
 
-  return (
-    <Iconicons name={iconName} color={focused ? colors.PINK_700 : colors.GRAY_500} size={25} />
-  );
+  return <Ionicons name={iconName} color={focused ? colors.PINK_700 : colors.GRAY_500} size={25} />;
 };
 
 const FeedTabNavigator = () => {
