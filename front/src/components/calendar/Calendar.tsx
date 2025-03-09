@@ -1,3 +1,4 @@
+import { ResponseCalendarPost } from '@/api/post';
 import { colors } from '@/constants';
 import { isSameAsCurrentDate, MonthYear } from '@/utils';
 import Iconicons from '@react-native-vector-icons/ionicons';
@@ -10,10 +11,17 @@ import DayOfWeeks from './DayOfWeeks';
 interface CalendarProps {
   monthYear: MonthYear;
   selectedDate: number;
+  schedules: ResponseCalendarPost;
   onPressDate: (date: number) => void;
   onChangeMonth: (increment: number) => void;
 }
-const Calendar = ({ monthYear, selectedDate, onPressDate, onChangeMonth }: CalendarProps) => {
+const Calendar = ({
+  monthYear,
+  selectedDate,
+  schedules,
+  onPressDate,
+  onChangeMonth,
+}: CalendarProps) => {
   const { month, year, lastDate, firstDayOfWeek } = monthYear;
   return (
     <>
@@ -43,6 +51,7 @@ const Calendar = ({ monthYear, selectedDate, onPressDate, onChangeMonth }: Calen
               date={item.date}
               selectedDate={selectedDate}
               onPressDate={onPressDate}
+              hasSchedule={Boolean(schedules[item.date])}
               isToday={isSameAsCurrentDate(year, month, item.date)}
             />
           )}
